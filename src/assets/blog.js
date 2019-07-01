@@ -78,7 +78,50 @@ parseFloat('0908.5fgy')  // 908.5
 <pre class="ql-syntax">Boolean('false')  // true
 !! null           // false
 </pre>
-<p> to be continue</p>`,
+<p>5、闭包</p><p>闭包是前端经常出现的一个东西。简单来说，闭包就是可以访问到其他函数内部变量的一个特殊函数。</p>
+<pre class="ql-syntax">function a(){
+  let inside = 0;
+  function b(){
+    console.log(inside)
+  }
+  return b
+}
+let test = a();
+test()  // 0  打印出了a函数里面的变量inside
+</pre>
+<p>在函数a执行完后，inside因为b函数调用的关系没有被回收。这也是我们使用闭包时需要注意的地方。那就是不能滥用闭包，否则会影响页面性能。</p>
+<p>6、 == 和 ===</p>
+<p>使用==进行判断时，会发生隐式转换，即等式左右两边类型不一致时，会自动进行类型转换，然后再判断。</p>
+<p>而===则是直接进行判断，不会自己转换类型。</p>
+<pre class="ql-syntax">'7' == 7   // true
+true == 1  // true
+'2' === 2  // false
+</pre>
+<p>7、原型</p>
+<p>js里，除了null之外，其他对象都有原型。这也是为什么我们新建了一个对象后就有一些方法可以调用。因为那是通过原型继承过来的。我们可以通过__proto__这个属性找到这个对象的原型。而这个对象的构造函数，可以通过__proto__的constructor属性找到。而构造函数本身也会有一个prototype属性指向原型。</p>
+<p>8、var let const</p>
+<p>首先这三个都是定义变量用的，但各有区别。</p>
+<p>var的话会存在变量提升的问题，let和const不会。</p>
+<pre class="ql-syntax">console.log(a)    // undefined
+var a = 1
+console.log(b)    // Cannot access 'b' before initialization
+let b = 2
+console.log(c)    // Cannot access 'c' before initialization
+const c = 3
+</pre>
+<p>let和const在全局作用域下声明的变量，也不会挂载在window上。</p>
+<pre class="ql-syntax">let abc = '123'
+console.log(window.abc)  // undefined
+</pre>
+<p>let声明的变量值可以改变，const的不行。</p>
+<pre class="ql-syntax">let abcd = 1234
+abcd += 1
+console.log(abcd)  // 1235
+const dcba = 4321
+dcba -= 1
+console.log(dcba)  // Assignment to constant variable.
+</pre>
+<p>to be continue...</p>`,
     "time": "2019",
     "type": "Javascript",
     "copyright": "original",
