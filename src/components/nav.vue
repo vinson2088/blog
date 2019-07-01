@@ -1,7 +1,8 @@
 <template>
   <div class="nav">
     <el-menu
-      :default-active="activeIndex"
+      router
+      :default-active="index"
       class="el-menu-demo"
       mode="horizontal"
       background-color="#409eff"
@@ -15,7 +16,7 @@
           <i slot="suffix" class="el-input__icon el-icon-search"></i>
         </el-input>
       </el-menu-item>
-      <el-menu-item index="2">
+      <el-menu-item index="/">
         <i class="el-icon-house"></i>
         <span slot="title">主页</span>
       </el-menu-item>
@@ -23,7 +24,7 @@
         <i class="el-icon-user"></i>
         <span slot="title">关于我</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="/blog">
         <i class="el-icon-date"></i>
         <span slot="title">博客</span>
       </el-menu-item>
@@ -33,6 +34,12 @@
 
 <script>
 export default {
+  props: {
+    index: {
+      type: String,
+      default: '/',
+    }
+  },
   name: 'navigation',
   data() {
     return {
