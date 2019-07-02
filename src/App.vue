@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view />
+    <el-backtop target="#app"></el-backtop>
   </div>
 </template>
 
@@ -11,5 +12,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height: 100%;
+  overflow: auto;
 }
 </style>
