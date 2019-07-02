@@ -1,7 +1,7 @@
 <template>
   <div class="blog">
     <navigation index="/blog"></navigation>
-    <div class="main">
+    <div class="main" :style="{height: domHeight}">
       <div class="center">
         <div class="filter">
           <table>
@@ -17,6 +17,7 @@
               <td>版权：</td>
               <td><router-link :to="{query: {copyright: 'original'}}" class="filter-btn">原创</router-link></td>
               <td><router-link :to="{query: {copyright: 'reprint'}}" class="filter-btn">转载</router-link></td>
+              <td><router-link :to="{query: {copyright: 'notes'}}" class="filter-btn">笔记</router-link></td>
             </tr>
             <tr>
               <td>时间：</td>
@@ -52,16 +53,28 @@ export default {
   components: {
     navigation
   },
+  mounted() {
+    this.windowHeight = window.innerHeight - 61
+  },
   data() {
-    return {}
+    return {
+      windowHeight: '',
+      domHeight: ''
+    }
   },
   computed: {
     blogList() {
       let filter = this.$route.query
+      let that = this
       if(Object.keys(filter).length){
         let filterData = datas.data.filter((item) => {
-          return item.type === filter.type || item.copyright === filter.copyright || item.time === filter.time
+          return ((item.type || '') === filter.type) || ((item.copyright || '') === filter.copyright) || ((item.time || '') === filter.time)
         })
+        if(filterData.length < 3){
+          that.domHeight = that.windowHeight + 'px'
+        } else {
+          that.domHeight = 'auto'
+        }
         return filterData
       } else {
         return datas.data

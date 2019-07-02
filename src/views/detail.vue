@@ -28,7 +28,7 @@ export default {
       })
       return filterData;
     }
-  },
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -59,5 +59,15 @@ export default {
   font-family: Arial;
   line-height: 1.5;
   padding: 10px;
+}
+.content >>> .reference{
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-left: 4px solid #efefef;
+  color: #888;
+}
+.content >>> .reference .link{
+  color: #888;
 }
 </style>

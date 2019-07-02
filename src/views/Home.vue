@@ -10,7 +10,7 @@
           <p class="name">Vinson</p>
           <p class="introduction">君子终日乾乾  夕惕若厉  无咎</p>
           <p>博客数</p>
-          <p class="num"><span>{{blogNum}}</span></p>
+          <p class="num"><span>{{blogList.length}}</span></p>
         </div>
         <div class="box tag-list">
           <el-tag effect="plain" v-for="(item, index) in tagList" :key="index">{{item.tag}}</el-tag>
@@ -26,7 +26,7 @@
           </ul>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="16">
         <el-row class="box center">
           <el-col :span="4">
             <img src="./../assets/logo.png" alt="avatar" class="top-img">
@@ -67,8 +67,7 @@ export default {
         {tag: 'es6'},
         {tag: 'Vue.js'},
         {tag: 'jQuery'}
-      ],
-      blogNum: 123
+      ]
     }
   },
   computed: {
@@ -79,100 +78,105 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.main{
+.home{
   background-color: #f0f0f0;
-  height: 100%;
-  box-sizing: border-box;
-  .box{
-    background-color: #fff;
-    font-size: 16px;
-    margin: 3em 0;
-    border-radius: 5px;
-    overflow: hidden;
-    .avatar{
-      position: relative;
-      background-color: #409eff;
-      height: 100px;
-      margin-bottom: 60px;
-      .img{
-        position: absolute;
-        left: 50%;
-        bottom: -40px;
-        transform: translateX(-50%);
-        width: 80px;
-        background-color: #fafafa;
-        border-radius: 50px;
-        border: 2px solid #fff;
+    .main{
+    height: 100%;
+    box-sizing: border-box;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    .box{
+      background-color: #fff;
+      font-size: 16px;
+      margin: 3em 0;
+      border-radius: 5px;
+      overflow: hidden;
+      .avatar{
+        position: relative;
+        background-color: #409eff;
+        height: 80px;
+        margin-bottom: 60px;
+        .img{
+          position: absolute;
+          left: 50%;
+          bottom: -40px;
+          transform: translateX(-50%);
+          width: 80px;
+          background-color: #fafafa;
+          border-radius: 50px;
+          border: 2px solid #fff;
+        }
       }
-    }
-    .name{
-      font-size: 20px;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-    .introduction{
-      color: #999;
-      margin: 0;
-      font-size: 12px;
-    }
-    .num{
-      padding-bottom: 40px;
-    }
-    .blog-type-title{
-      text-align: left;
-      padding: 0 15px;
-    }
-    .blog-type{
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      text-align: left;
-      .types{
-        .links{
-          text-decoration: none;
-          color: #666;
-          display: block;
-          padding: 10px 15px;
+      .name{
+        font-size: 20px;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+      .introduction{
+        color: #999;
+        margin: 0;
+        font-size: 12px;
+      }
+      .num{
+        padding-bottom: 10px;
+      }
+      .blog-type-title{
+        text-align: left;
+        padding: 0 15px;
+      }
+      .blog-type{
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        text-align: left;
+        .types{
+          .links{
+            text-decoration: none;
+            color: #666;
+            display: block;
+            padding: 10px 15px;
+          }
         }
       }
     }
-  }
-  .tag-list{
-    padding: 20px;
-    .el-tag{
-      margin: 5px;
-    }
-  }
-  .center{
-    border-top: 4px solid #409eff;
-    padding: 10px 20px;
-    .btn{
-      text-align: right;
-      margin-top: 5px;
-    }
-    .top-img{
-      border-radius: 50px;
-      width: 50px;
-      background-color: #fafafa;
-      border: 2px solid #fff;
-    }
-  }
-  .blog-list{
-    display: block;
-    text-decoration: none;
-    padding: 20px;
-    text-align: left;
-    .title{
-      font-size: 20px;
-      margin-top: 0;
-      color: #333;
-    }
-    .summary{
-      color: #999;
-    }
-    .tag{
+    .tag-list{
+      padding: 20px;
       .el-tag{
-        margin: 0 5px;
+        margin: 5px;
+      }
+    }
+    .center{
+      border-top: 4px solid #409eff;
+      padding: 10px 20px;
+      .btn{
+        text-align: right;
+        margin-top: 5px;
+      }
+      .top-img{
+        border-radius: 50px;
+        width: 50px;
+        background-color: #fafafa;
+        border: 2px solid #fff;
+      }
+    }
+    .blog-list{
+      display: block;
+      text-decoration: none;
+      padding: 20px;
+      text-align: left;
+      .title{
+        font-size: 20px;
+        margin-top: 0;
+        color: #333;
+      }
+      .summary{
+        color: #999;
+      }
+      .tag{
+        .el-tag{
+          margin: 0 5px;
+        }
       }
     }
   }
