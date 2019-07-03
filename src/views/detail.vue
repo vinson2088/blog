@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <navigation index="/blog"></navigation>
-    <div class="main">
+    <div class="main" :style="{height: domHeight}">
       <div class="center">
         <p class="title">{{detail[0].title}}</p>
         <p class="content" v-html="detail[0].content">{{detail[0].content}}</p>
@@ -17,8 +17,19 @@ export default {
   components: {
     navigation
   },
+  mounted() {
+    let documentHeight = document.querySelector('.detail').offsetHeight
+    let windowHeight = window.innerHeight
+    if(documentHeight > windowHeight){
+      this.domHeight = 'auto'
+    } else {
+      this.domHeight = window.innerHeight - 61 + 'px'
+    }
+  },
   data() {
-    return {}
+    return {
+      domHeight: ''
+    }
   },
   computed: {
     detail() {
@@ -37,6 +48,7 @@ export default {
   height: 100%;
   .center{
     width: 100%;
+    height: 100%;
     max-width: 700px;
     margin: 0 auto;
     background-color: #fff;
@@ -44,7 +56,7 @@ export default {
     box-sizing: border-box;
     text-align: left;
     .title{
-      font-size: 20px;
+      font-size: 23px;
       color: #333;
     }
     .content{
@@ -59,6 +71,7 @@ export default {
   font-family: Arial;
   line-height: 1.5;
   padding: 10px;
+  overflow-x: auto;
 }
 .content >>> .reference{
   margin: 10px 0;

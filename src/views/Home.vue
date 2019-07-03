@@ -10,7 +10,7 @@
           <p class="name">Vinson</p>
           <p class="introduction">君子终日乾乾  夕惕若厉  无咎</p>
           <p>博客数</p>
-          <p class="num"><span>{{blogList.length}}</span></p>
+          <p class="num"><span>{{blogNum}}</span></p>
         </div>
         <div class="box tag-list">
           <el-tag effect="plain" v-for="(item, index) in tagList" :key="index">{{item.tag}}</el-tag>
@@ -72,7 +72,13 @@ export default {
   },
   computed: {
     blogList() {
-      return datas.data
+      let arr = datas.data.filter((item, index) => {
+        return index < 4
+      })
+      return arr
+    },
+    blogNum() {
+      return datas.data.length
     }
   },
 }
