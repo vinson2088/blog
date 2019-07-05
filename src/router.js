@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-export default new Router({
+const routerList =  new Router({
   routes: [
     {
       path: '/',
@@ -27,3 +27,10 @@ export default new Router({
     }
   ]
 })
+
+routerList.beforeEach((to, from, next) => {
+  document.querySelector('#app').scrollTop = 0
+  next()
+})
+
+export default routerList

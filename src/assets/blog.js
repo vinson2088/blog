@@ -1,5 +1,291 @@
 export let data = [
   {
+    "title": "初识TypeScript",
+    "content": `<p>当今前端界有个愈发明显的趋势，那就是使用TypeScript代替JavaScript。那TypeScript有什么魔力让越来越多的人选择它呢？</p>
+<p>首先就是js是一种动态类型语言，我们声明某个变量时，是不用声明它是什么类型的，等后面给它赋值了，它自己根据赋的值去变换类型。注意这里不是第一次赋值，而是每次赋值都可以变换类型。</p>
+<pre class="ql-syntax">let a;
+typepf(a) // "undefined"
+a = 2;
+typeof(a) // "number"
+a = '123'
+typeof(a) // "string"
+</pre>
+<p>这个特性可以方便我们轻松转换变量的类型，同时，也方便我们写bug来祸害下一个接手项目的人</p>
+<pre class="ql-syntax">let a = 1
+a += '1'
+console.log(a) // "11"
+</pre><p>这里如果没有注意到相加的两个值是不同类型的话，就出bug了。</p>
+<p>而如果你用的是TypeScript，那这个就不是问题了。</p>
+<p>TypeScript声明变量的时候，需要告知它是什么类型的。然后在赋值如果赋的是其他类型的值，那TypeScript就直接会告诉你，嘿兄弟，这里的类型错了哟。。</p>
+<pre class="ql-syntax">let a: string = 123
+// error TS2322: Type '123' is not assignable to type 'string'.
+</pre>
+<p>TypeScript里有boolean、number、string、void、null、undefined、any这些类型。这里面void指的是给没有返回值的时候用的。比如</p>
+<pre class="ql-syntax">function alertName(): void{
+  alert('我的名字叫XXX')
+}
+</pre>
+<p>而这里的any类型就和普通js变量一样了，它可以赋任何类型的值。</p>
+<pre class="ql-syntax">let a:any = 123
+a = "321"
+console.log(a) // "321"
+</pre>
+<p>如果我们一开始声明变量的时候没有声明类型的话，也会默认类型是any，可以随意给它赋值。不过要是声明的时候一并赋了值，TypeScript就会智能的给你推算类型。</p>
+<pre class="ql-syntax">let a
+a = 123
+a = "hello"
+console.log(a) // "hello"
+
+let b = 123
+b = "hello"
+console.log(b) // error TS2322: Type '"hello"' is not assignable to type 'number'.
+</pre>
+<p>那可能就有人会担心了，如果有某个变量可能是number也可能是string该怎么办？只能用any吗？那不小心赋了其他类型的怎么办？</p>
+<p>不必担心，TypeScript可以设置联合类型</p>
+<pre class="ql-syntax">let a: string | number
+a = "123"
+console.log(a) // "123"
+a = 321
+console.log(a) // 321
+</pre>
+<p>在使用联合类型的时候，要注意，此时变量能调用的方法，只能是联合类型里面所有类型都通用的方法。</p>
+<pre class="ql-syntax">function getLength(sth: number | string):number{
+  return sth.length
+}
+console.log(getLength('1234'))
+//error TS2339: Property 'length' does not exist on type 'string | number'.
+  Property 'length' does not exist on type 'number'.
+
+function getString(sth: number | string):string{
+  return sth.toString()
+}
+console.log(getString(4321)) // "4321"
+</pre>
+<p>TypeScript还可以对值的结构进行类型检查，在这里是接口interface来为这些类型命名。</p>
+<pre class="ql-syntax">interface Test{
+  a: string;
+  b: number;
+}
+let a: Test ={
+  a: '123',
+  b: '321'
+}
+</pre>
+<p>注意接口定义了哪些属性，变量也必须有这些属性，不能多也不能少。如果真的有一些可能有也可能没有的属性，可以使用“可选属性”。</p>
+<pre class="ql-syntax">interface Test{
+  a: string;
+  b: number;
+  c?: boolean;
+}
+let a: Test ={
+  a: '123',
+  b: '321'
+}
+let b:Test ={
+  a: 'hello',
+  b: 10086,
+  c: true
+}
+</pre>
+<p>此时虽然有可选属性，但依然不可以添加一些未定义的属性。如果想添加未定义的属性，需要使用“任意属性”</p>
+<pre class="ql-syntax">interface Test{
+  a: string;
+  b: number;
+  c?: boolean;
+  [propName: string]: any;
+}
+let a: Test ={
+  a: '123',
+  b: 321,
+  c: false,
+  d: 998
+}
+</pre>
+<p>注意如果使用任意属性，那确定属性的类型都必须是任意属性的子属性。</p>
+<pre class="ql-syntax">interface Test{
+  a: string;
+  b: number;
+  c?: boolean;
+  [propName: string]: string;
+}
+let a:Test ={
+  a: '321',
+  b: 123,
+  c: false,
+  d: '456'
+}
+//error TS2411: Property 'b' of type 'number' is not assignable to string index type 'string'.
+error TS2411: Property 'c' of type 'boolean' is not assignable to string index type 'string'.
+error TS2322: Type '{ a: string; b: number; c: false; d: string; }' is not assignable to type 'Test'.
+  Property 'b' is incompatible with index signature.
+    Type 'number' is not assignable to type 'string'.
+</pre>
+<p>有些时候我们希望某个属性赋值之后就不要再变，这时候我们可以使用只读属性</p>
+<pre class="ql-syntax">interface Test{
+  readonly a: string;
+  b: number;
+}
+let a:Test ={
+  a: '123',
+  b: 321
+}
+a.a = '456' // error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
+</pre>
+<p>我们还可以合并接口</p>
+<pre class="ql-syntax">interface Test{
+  a: string;
+}
+interface Test{
+  b: number;
+}
+let a:Test ={
+  a: '123',
+  b: 321
+}
+</pre>
+<p>使用TypeScript声明数组，可以这么做</p>
+<pre class="ql-syntax">let arr:number[] = [1,2,3]
+
+interface StrArr{
+  [index: number]: string
+}
+let strArr:StrArr = ['1','2','3']
+</pre><p>一旦定义了是number类型，那数组里的元素就全都只能是number，任何会使数组内出现非number类型元素的操作都会报错。</p><p>使用TypeScript声明函数，可以这么做</p><pre class="ql-syntax" spellcheck="false">function sum(x: number, y: number): number {
+  return x + y;
+}
+
+let mySum: (x: number, y: number) =&gt; number = function (x: number, y: number): number {
+   return x + y;
+};
+
+interface SearchFunc {
+  (source: string, subString: string): boolean;
+}
+let mySearch: SearchFunc;
+mySearch = function(source: string, subString: string) {
+  return source.search(subString) !== -1;
+}
+</pre>
+<p>第一种好理解，第二种是什么意思呢？我们可以拆开三部分来看</p>
+<p>let mySum:<span style="color: rgb(0, 102, 204);">&nbsp;(x: number, y: number) =&gt; number&nbsp;</span>=function (x: number, y:number): number {</p><p>  return x + y;</p><p>}</p>
+<p>很明显第一部分是给函数命名，蓝色的第二部分则是类型定义，这里的=&gt;和es5的箭头函数并不是一个东西，这里的=&gt;的左边是函数的输入类型，=&gt;右边是函数的输出类型。在这个例子的话，就是说函数两个参数都是number类型，最后函数的输出也是number的值。</p>
+<p>而第三种，通过接口的也很好懂，两个输入的参数是string类型，输出则是boolean类型。</p>
+<p>在TypeScript里用函数也可以使用可选参数和默认值</p>
+<pre class="ql-syntax">function buildName(firstName: string = 'Tom', lastName?: string) {
+  if (lastName) {
+    return firstName + ' ' + lastName;
+  } else {
+     return firstName;
+  }
+}
+let tomcat = buildName('Tom', 'Cat');
+let tom = buildName('Tom');
+</pre>
+<p>如果我们输入的参数是联合类型，而在函数内要分情况的时候，可以使用类型断言。</p>
+<pre class="ql-syntax">function getLength(something: string | number): number {
+  if ((&lt;string&gt;something).length) {
+    return (&lt;string&gt;something).length;
+  } else {
+    return something.toString().length;
+  }
+}
+</pre>
+<p>这里的&lt;string&gt;的意思就是人为断言此时的something是string类型。</p>
+<p>TypeScript里还有很多内置对象可供使用</p>
+<pre class="ql-syntax">let b: Boolean = new Boolean(1);
+let d: Date = new Date();
+let body: HTMLElement = document.body;
+let allDiv: NodeList = document.querySelectorAll('div');
+</pre>
+<p>如果我们想使用内部元素是不同类型的数组，可以选择使用元祖</p>
+<pre class="ql-syntax">let xcatliu: [string, number] = ['Xcat Liu', 25];</pre>
+<p>当添加越界的元素时，它的类型会被限制为元组中每个类型的联合类型。</p>
+<p>如果我们想声明一些取值被限定在一定范围的对象时，可以使用枚举类型的对象</p>
+<pre class="ql-syntax">enum Days {Sun, Mon, Tue, Wed, Thu, Fri, Sat};
+console.log(Days["Sun"] === 0);
+</pre>
+<p>我们也可以手动给枚举项赋值</p>
+<pre class="ql-syntax">enum Days {Sun = 7, Mon = 1, Tue, Wed, Thu, Fri, Sat};
+</pre>
+<p>1像例子这样赋值的时候需要注意，枚举项中没有赋值的，会根据前一项的值来确定自己的值，所以这里的Tue是2，Wed是3。。所以如果这里的Sun是2的话，Tue也是2，取值的时候就会出错。这个特点也决定了，如果要手动给枚举项赋值，除非是赋number类型的，否则就得给所有的项都赋值。</p>
+<p>TypeScript也可以使用类</p>
+<p>TypeScript 可以使用三种访问修饰符（Access Modifiers），分别是 public、private 和 protected。</p>
+<ul>
+<li>public 修饰的属性或方法是公有的，可以在任何地方被访问到，默认所有的属性和方法都是 public 的</li>
+<li>private 修饰的属性或方法是私有的，不能在声明它的类的外部访问</li>
+<li>protected 修饰的属性或方法是受保护的，它和 private 类似，区别是它在子类中也是允许被访问的</li>
+</ul>
+<pre class="ql-syntax" spellcheck="false">class Animal {
+&nbsp; public name:string;
+&nbsp; private age:number;
+&nbsp; protected sex:string;
+&nbsp; public constructor(name, age, sex) {
+&nbsp; &nbsp; this.name = name;
+&nbsp; }
+}
+class Cat extends Animal {
+&nbsp; constructor(name, age, sex) {
+&nbsp; &nbsp; super(name, age, sex);
+&nbsp; &nbsp; console.log(this.sex);
+&nbsp; }
+}
+let a = new Animal('jack', 20, 'boy');
+</pre>
+<p>TypeScript里还有一种称为抽象类的，它不能实例化，而且它里面的抽象方法必须被子类实现</p>
+<pre class="ql-syntax">abstract class Animal {
+  public name;
+  public constructor(name) {
+    this.name = name;
+  }
+  public abstract sayHi();
+}
+class Cat extends Animal {
+  public sayHi() {
+    let names = this.name;
+    console.log('Meow, My name is ' + names);
+  }
+}
+let cat = new Cat('Tom');
+</pre>
+<p>假如我们想要使用一些第三方库的时候，需要先声明。通常我们会把类型声明放到一个单独的文件中，这就是声明文件。</p>
+<pre class="ql-syntax">declare var jQuery: (selector: string) =&gt; any;</pre>
+<p>网上已经有人写好了类型文件，可以直接下载 <a href="http://microsoft.github.io/TypeSearch/" target="_blank">声明文件</a></p>`,
+    "time": "2019",
+    "type": "Javascript",
+    "copyright": "original",
+    "query": {
+      "name": "初识TypeScript"
+    },
+    "link": "/blogDetail",
+    "summary": "当今前端界有个愈发明显的趋势，那就是使用TypeScript代替JavaScript",
+    "tag": [
+      "Javascript",
+      "TypeScript"
+    ]
+  },
+  {
+    "title": "CSS预处理",
+    "content": `<p>我们有时候会遇到一个尴尬的情况，那就是css没办法“编程”。</p>
+<p>来看这么一个案例：</p>
+<p>css做一个loading图标，我们需要很多个圆点，然后又要控制他们的位置还有出现以及消失的时间。如果单纯用css来写，那要写很多遍代码，而且代码相似度还非常高。为之奈何？</p>
+<p>我们可以使用css预处理来解决。这里使用的是sass</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="vqroBG" src="//codepen.io/vinson2088/embed/vqroBG/?height=265&theme-id=0&default-tab=css,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/vqroBG/'>vqroBG</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>`,
+    "time": "2019",
+    "type": "CSS3",
+    "copyright": "notes",
+    "query": {
+      "name": "CSS预处理"
+    },
+    "link": "/blogDetail",
+    "summary": "我们有时候会遇到一个尴尬的情况，那就是css没办法“编程”",
+    "tag": [
+      "CSS"
+    ]
+  },
+  {
     "title": "在vue上做动画",
     "content": `<p>我们都知道，在vue里面我们用&lt;transition&gt;组件将要做动画的元素包裹起来，然后可以使用几个钩子去设置动画效果。</p>
 <pre class="ql-syntax">&lt;template&gt;
@@ -136,7 +422,12 @@ export default{
   const betterlazyload = throttleDebounce(lazyload, 500)
   window.addEventListener('scroll', betterlazyload, false)
 &lt;/script&gt;
-</pre>`,
+</pre>
+<p>有一点需要注意，就是图片没有地址时候的高度问题。可使用div占位之类的方法解决。这里就简单的直接去设置高度。</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="ydqNYL" src="//codepen.io/vinson2088/embed/ydqNYL/?height=265&theme-id=0&default-tab=html,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/ydqNYL/'>ydqNYL</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>`,
     "time": "2019",
     "type": "Javascript",
     "copyright": "notes",
@@ -152,7 +443,12 @@ export default{
   {
     "title": "防抖与节流",
     "content": `<blockquote class="reference">本文参考掘金小册《前端性能优化原理与实践》。以下是小册链接：<a class="link" href="https://juejin.im/book/5b936540f265da0a9624b04b" target="_blank">《前端性能优化原理与实践》</a></blockquote>
-<p>假设现在给mouseover绑定了一个持续1秒钟的向下展开事件，mouseout绑定向上闭合事件。那在一秒钟之内鼠标多次滑过会发生什么情况？答案是鼠标离开后，元素还会继续展开闭合多次。但很明显这个并不是我们要的效果。再想象这么一个场景，我们给某个按钮绑定了提交表单的事件。那万一用户手抖了或者帕金森了点击多次了会怎样？答案就是表单也会被提交很多次。如何防止这种情况？</p>
+<p>假设现在给mouseover绑定了一个持续1秒钟的向下展开事件，mouseout绑定向上闭合事件。那在一秒钟之内鼠标多次滑过会发生什么情况？</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="trigger" src="//codepen.io/vinson2088/embed/YojZZG/?height=265&theme-id=0&default-tab=html,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/YojZZG/'>trigger</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>答案是鼠标离开后，元素还会继续展开闭合多次。但很明显这个并不是我们要的效果。再想象这么一个场景，我们给某个按钮绑定了提交表单的事件。那万一用户手抖了或者帕金森了点击多次了会怎样？答案就是表单也会被提交很多次。如何防止这种情况？</p>
 <p>有这么两种方式：</p>
 <p>1、使用遮罩层，阻止用户多次点击提交按钮。但这个只适合于这种提交事件。</p>
 <p>2、使用事件防抖或者事件节流防止多次触发。</p>
@@ -174,6 +470,10 @@ export default{
   }
 }
 </pre>
+<iframe height="265" style="width: 100%;" scrolling="no" title="debounce" src="//codepen.io/vinson2088/embed/OewpVm/?height=265&theme-id=0&default-tab=js,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/OewpVm/'>debounce</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 <h3>节流</h3>
 <p>实现节流的思路与防抖有些不一样，节流是当事件触发了之后，等待一段时间里，如果又触发了这个事件，不去理会后面触发的事件，在等待结束后执行这个触发的事件。</p>
 <p>基于这个思路，我们来写这么一个节流函数</p>
@@ -190,6 +490,10 @@ export default{
   }
 }
 </pre>
+<iframe height="265" style="width: 100%;" scrolling="no" title="throttle" src="//codepen.io/vinson2088/embed/vqaxxy/?height=265&theme-id=0&default-tab=js,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/vqaxxy/'>throttle</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 <h3>会节流的防抖函数</h3>
 <p>其实上面实现的防抖函数存在一个bug，那就是，如果我一直触发事件的话，防抖函数一直清空等待时间，那事件就一直不会响应。我们可以利用节流的思想给防抖加上另外一个等待时间，如果超过了这个等待时间，就会响应触发的事件。</p>
 <pre class="ql-syntax">function throttleDebounce(fn, delay){
@@ -211,6 +515,10 @@ export default{
   }
 }
 </pre>
+<iframe height="265" style="width: 100%;" scrolling="no" title="throttleDebounce" src="//codepen.io/vinson2088/embed/bPjxLv/?height=265&theme-id=0&default-tab=js,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/bPjxLv/'>throttleDebounce</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 <p>关于防抖和节流就介绍到这，如果担心防抖和节流会记混的话，可以构建这么一个场景帮助记忆：</p>
 <p>有一个大院一群学生要去学校。我们把去上学看作触发的事件。如果他们各自开车过去当然是可以的，不过车太多可能就会堵塞交通。这就是没有任何防抖节流的效果。如果他们坐公交车过去，我们知道公交车司机是不会等你的，上车了多少人就多少人，司机只看时间，时间一到就开车。这就是节流。如果他们坐黑车过去，黑车司机看到有人上车了，就很开心，会觉得再等一会儿可能就又会有一个人上车，他就可以多赚一些，所以会继续等。除非是上来一个之后等了很久都没人，司机才会放弃等待，开车出发。这就是防抖。那如果黑车司机一直在等人上车的话也不行啊，学生们会担心迟到所以车上的学生会一直催促黑车司机，给他一个时间，到点了就一定要走。这个就是经过节流思想优化的防抖。</p>`,
     "time": "2019",
@@ -672,6 +980,66 @@ console.log(deepcopy.bcd.cdf)  // 321
     "tag": [
       "javascript",
       "es6"
+    ]
+  },
+  {
+    "title": "实现一个简单的双向绑定",
+    "content": `<p>我们知道，在vue里我们可以使用v-model来实现双向绑定，那如果我们想要自己实现一个双向绑定，该怎么做呢？</p>
+<p>我们可以借助Object.defineProperty来做到这一点。</p>
+<p>以下是MDN上对Object.defineProperty的介绍：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank">Object.defineProperty</a></p>
+<p>从这里我们可以知道，在给对象某个属性赋值的时候，会调用里面的set方法。由此我们可以通过给某个对象绑定一个属性值的方式来实现双向绑定</p>
+<pre class="ql-syntax">&lt;input type='text' id="input"&gt;
+&lt;div id="div"&gt;&lt;/div&gt;
+&lt;script&gt;
+  let obj = {}
+  const input = document.querySelector('#input')
+  const div = document.querySelector('#div')
+  Object.defineProperty(obj, 'bind', {
+    set: (val) =&gt; {
+      input.value = val
+      div.innerHTML = val
+    }
+  })
+  input.onkeyup = () =&gt; {
+    obj.bind = input.value
+  }
+&lt;/script&gt;
+</pre>
+<p>到此我们就大概完成了vue上v-model="obj.bind"这样的操作。</p>
+<p>不过，还有没有更加新一点的方法去实现？</p>
+<p>当然是有的，那就是使用Proxy对象去实现。</p>
+<p>以下是Proxy的MDN文档：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank">Proxy</a></p>
+<pre class="ql-syntax">&lt;input type="text" id="input"&gt;
+&lt;div id="div"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const input = document.querySelector('#input')
+  const div = document.querySelector('#div')
+  let handler = {
+    set: (obj, prop, newval) = {
+      input.value = newval
+      div.innerHTML = newval
+    }
+  }
+  let obj = new Proxy({}, handler)
+  input.onkeyup = () =&gt; {
+    obj.bind = input.value
+  }
+&lt;/script&gt;
+</pre>
+<iframe height="265" style="width: 100%;" scrolling="no" title="OewPwv" src="//codepen.io/vinson2088/embed/OewPwv/?height=265&theme-id=0&default-tab=js,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/OewPwv/'>OewPwv</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>`,
+    "time": "2019",
+    "type": "Javascript",
+    "copyright": "original",
+    "query": {
+      "name": "实现一个简单的双向绑定"
+    },
+    "link": "/blogDetail",
+    "summary": "我们知道，在vue里我们可以使用v-model来实现双向绑定，那如果我们想要自己实现一个双向绑定，该怎么做呢？",
+    "tag": [
+      "Javascript"
     ]
   },
   {
