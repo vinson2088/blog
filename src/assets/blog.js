@@ -1,5 +1,35 @@
 export let data = [
   {
+    "title": "css变量",
+    "content": `<p>现如今CSS能做到的事情越来越多了，不借助预处理器，也可以使用变量。</p>
+<p>一般是在某个选择器上声明，然后在它的后代元素就可以通过var()来使用了。var()使用变量的时候，还可以使用第二个参数作为默认值。</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="css变量" src="//codepen.io/vinson2088/embed/wLQxpZ/?height=265&theme-id=0&default-tab=css,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/wLQxpZ/'>css变量</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>基于这样的特性，我们就可以写一个换肤的操作了。</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="css换肤" src="//codepen.io/vinson2088/embed/jjQpjW/?height=265&theme-id=0&default-tab=css,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/jjQpjW/'>css换肤</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>CSS变量还有一个预处理器变量无法做到的事，那就是可以被js访问到。这也就意味着我们可以批量“操作”DOM。</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="js获取css变量" src="//codepen.io/vinson2088/embed/BgGGJM/?height=265&theme-id=0&default-tab=js,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/BgGGJM/'>js获取css变量</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>`,
+    "time": "2019",
+    "type": "CSS3",
+    "copyright": "notes",
+    "query": {
+      "name": "css变量"
+    },
+    "link": "/blogDetail",
+    "summary": "现如今CSS能做到的事情越来越多了，不借助预处理器，也可以使用变量。",
+    "tag": [
+      "CSS3"
+    ]
+  },
+  {
     "title": "初识TypeScript",
     "content": `<p>当今前端界有个愈发明显的趋势，那就是使用TypeScript代替JavaScript。那TypeScript有什么魔力让越来越多的人选择它呢？</p>
 <p>首先就是js是一种动态类型语言，我们声明某个变量时，是不用声明它是什么类型的，等后面给它赋值了，它自己根据赋的值去变换类型。注意这里不是第一次赋值，而是每次赋值都可以变换类型。</p>
