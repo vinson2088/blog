@@ -1,5 +1,342 @@
 export let data = [
   {
+    "title": "HTML组件",
+    "content": `<p>组件化，一个我们经常见到也经常使用到的东西。不过通常我们都是在框架里使用它们的。比如我们在Vue.js里注册一个组件然后使用它，是这样的：</p>
+<pre class="ql-syntax">&lt;template&gt;
+  &lt;div&gt;
+    &lt;my-component&gt;&lt;/my-component&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+&lt;script&gt;
+import myComponent from './../component/mycomponent.vue'
+export default{
+  data(){
+    return {}
+  },
+  components:{
+    myComponent
+  }
+}
+&lt;/script&gt;
+</pre>
+<p>那如果我们不用框架呢？该怎么利用组件化的思想复用代码？</p>
+<p>答案是使用Web Components。</p>
+<p>所谓的Web Components包含三个东西，分别是<strong>Custom Elements</strong>，<strong>Shadow DOM</strong>和<strong>HTML templates。</strong>我们一个个来看。</p>
+<p><strong>Custom Elements</strong>，自定义元素，和其他的HTML元素其实没有多大区别。只是我们通过浏览器的API去给它命名。一般给他们的名字中间都加个连词符号，来跟普通的HTML元素区别开。</p>
+<pre class="ql-syntax">// html
+&lt;my-component&gt;&lt;/my-component&gt;
+
+// js
+class MyComponent extends HTMLElement{
+  connetcedCallback(){
+    this.innerHTML = '&lt;p&gt;Hello&lt;/p&gt;'
+  }
+}
+customElements.define('my-component',MyComponent)
+</pre>
+<p><strong>Shadow DOM</strong>，对DOM的一个封装。一般普通DOM下的内容称为"light DOM"，而这里封装后的就是"shadow DOM"。我们在普通DOM下选择元素的时候可以使用document.querySelector这些选择器，但是这些选择器是没办法选择到shadow DOM的东西，因为它们不在light DOM里，也就没在document里。不过它在shadow DOM里，也就是在shdowRoot里，所以我们可以使用shdowRoot.querySelector来选到它</p>
+<pre class="ql-syntax">// html
+&lt;div class="example"&gt;文字内容文字内容文字内容&lt;/div&gt;
+
+// js
+const shadowRoot = document.querySelector('.example').attachShadow({model: 'open'})
+shadowRoot.innerHTML = '&lt;style&gt;
+  .txt{
+    color: #00f;
+  }
+&lt;/style&gt;
+&lt;p&gt;这段文字是：&lt;slot&gt;&lt;/slot&gt;&lt;/p&gt;'
+</pre>
+<p><strong>HTML templates</strong>，也就是模板，通常不会立即被渲染，而是等待后面调用。</p>
+<pre class="ql-syntax">// html
+&lt;template id="my-template"&gt;
+  &lt;li&gt;&lt;pclass="title"&gt;&lt;/p&gt;&lt;p class="content"&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;/template&gt;
+&lt;ul class="list"&gt;&lt;/ul&gt;
+
+// js
+const templateEle = document.querySelector('#my-template')
+const dataList = [
+  {title: 'title1', content: 'content1'},
+  {title: 'title2', content: 'content2'},
+  {title: 'title3', content: 'content3'},
+]
+dataList.forEach(dataList =&gt; {
+  const instance = document.importNode(templateEle.content, true)
+  instance.querySelector('.title').innerHTML = book.title;
+  instance.querySelector('.content').innerHTML = book.content;
+  document.querySelector('.list').appendChild(instance);
+})
+</pre>
+<p>to be continue</p>`,
+    "time": "2019",
+    "type": "HTML5",
+    "copyright": "notes",
+    "query": {
+      "name": "HTML组件"
+    },
+    "link": "/blogDetail",
+    "summary": "组件化，一个我们经常见到也经常使用到的东西。不过通常我们都是在框架里使用它们的",
+    "tag": [
+      "HTML5",
+      "组件化"
+    ]
+  },
+  {
+    "title": "css滤镜",
+    "content": `<p>今天来介绍一下css的滤镜功能。</p><p>首先还是放上MDN上关于滤镜的介绍： <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter" target="_blank">filter</a></p>
+<p>然后还有它的兼容性，放上 can I use上的数据： <a href="https://www.caniuse.com/#feat=css-filters" target="_blank">filter</a></p>
+<p>可以看到如果把IE这个深坑丢掉的话，兼容性还算可以吧。。</p>
+<p>filter有下面这几种滤镜：</p>
+<p><strong>模糊滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: blur(5px)</pre>
+<p>接收一个参数，设定高斯函数的标准差，可以理解为模糊程度。数值越大就越模糊。默认值为0。此参数可设置为除百分值之外的其他css长度值。</p>
+<p><strong>亮度滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: brightness(0.5)</pre>
+<p>接收一个参数，设定转换比例，可以理解为亮度值乘以参数值得出最后的亮度值。不接受负值。</p>
+<p><strong>对比度滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: contrast(2)</pre>
+<p>接收一个参数，设定转换比例，可以理解为对比度乘以参数值得出最后的对比度。不接受负值。</p>
+<p><strong>投影滤镜</strong></p>
+<p>用法：</p><pre class="ql-syntax">filter: drop--shodow(5px 5px 10px  #000)</pre>
+<p>接收4个参数，分别是：</p>
+<blockquote class="reference">
+<p>offerset-x：X轴方向的偏移</p>
+<p>offset-y：Y轴方向的偏移</p>
+<p>blur-radius：模糊程度</p>
+<p>color：阴影颜色</blockquote>
+<p><strong>灰度滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: grayscale(0.5)</pre>
+<p>接收一个参数，设定转换比例，可以理解为变灰的程度，如果为0则无变化，如果是1则是完全变为灰度图。取值范围是0-1。</p>
+<p><strong>色相滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: hue-rotate(90deg)</pre>
+<p>接收一个参数，设定旋转的色相角度。</p>
+<p><strong>反相滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: invert(0.5)</pre>
+<p>接收一个参数，设定转换比例，可以理解为反相的程度，如果为0则无变化，如果是1则是完全反相。取值范围是0-1。</p>
+<p><strong>透明度滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: opacity(0.5)</pre>
+<p>接收一个参数，设置转换比例，可以理解为透明程度，为0则是完全透明，为1则是完全不透明。取值范围是0-1。</p>
+<p><strong>饱和度滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: saturate(2)</pre>
+<p>接收一个参数，设置转换比例，可以理解为饱和度乘以参数值得到最后的饱和度。不接受负值。</p>
+<p><strong>褐色滤镜</strong></p>
+<p>用法：</p>
+<pre class="ql-syntax">filter: sepia(0.5)</pre>
+<p>接收一个参数，设置转换比例，可以理解为褐色的程度，为0则无变化，为1则是完全变为褐色。</p>
+<p><br></p>
+<p>使用css滤镜的时候，可以多个滤镜复合使用，中间用空格隔开。</p>
+<pre class="ql-syntax">filter: blur(5px) brightness(0.5) contrast(2)</pre>
+<p>看起来似乎很麻烦的样子，有没有简单一些的方法？？</p>
+<p>当然有，<a href="https://cssgenerator.org/" target="_blank">CSS Generator</a>帮助你！</p>`,
+    "time": "2019",
+    "type": "CSS3",
+    "copyright": "notes",
+    "query": {
+      "name": "css滤镜"
+    },
+    "link": "/blogDetail",
+    "summary": "今天来介绍一下css的滤镜功能",
+    "tag": [
+      "CSS3"
+    ]
+  },
+  {
+    "title": "box-shadow实现影分身",
+    "content": `<p>如果想要实现两个完全相同的图形，你会怎么做？复制一次html元素？有没有更优(zhuāng)雅(bī)的做法？</p>
+  <p>当然有！box-shadow满足你。</p>
+  <p>首先先看看MDN上box-shadow各个属性的介绍：<a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/box-shadow#Values" target="_blank">box-shadow</a>
+  </p>
+<blockquote class="reference">
+  <p>offset-x: X轴方向的偏移量</p>
+  <p>offset-y: Y轴方向的偏移量</p>
+  <p>blur-radius: 模糊的距离大小</p>
+  <p>spread-radius: 阴影增大多少</p>
+  <p>color: 阴影颜色</p>
+  <p>inset: 设置后变为内阴影</p>
+  </blockquote>
+  <p>试想，如果我们单单只设置X,Y方向的偏移以及阴影大小，颜色设置成和元素一样的颜色，模糊距离设置成0，那不就是元素的另一个翻版了么？</p>
+  <p>为方便观看这里给元素本身加上了一个红色边框</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="copy" src="//codepen.io/vinson2088/embed/ewopBQ/?height=265&theme-id=0&default-tab=css,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/ewopBQ/'>copy</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<p>那我们就可以愉快的做出一朵云了</p>
+<iframe height="265" style="width: 100%;" scrolling="no" title="XLQmGr" src="//codepen.io/vinson2088/embed/XLQmGr/?height=265&theme-id=0&default-tab=css,result" frameborder="no" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/vinson2088/pen/XLQmGr/'>XLQmGr</a> by 陈文鑫
+  (<a href='https://codepen.io/vinson2088'>@vinson2088</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>`,
+    "time": "2019",
+    "type": "CSS3",
+    "copyright": "notes",
+    "query": {
+      "name": "box-shadow实现影分身"
+    },
+    "link": "/blogDetail",
+    "summary": "如果想要实现两个完全相同的图形，你会怎么做？",
+    "tag": [
+      "CSS3"
+    ]
+  },
+  {
+    "title": "二叉树",
+    "content": `<p>树是计算机科学里面经常用到的一种非线性数据结构。二叉树是一种特殊的树结构，它的每个节点最多只会有2个子树。通常子树被称为“左子树”和“右子树”。</p>
+<p>我们一般用“<strong>节点的度</strong>”描述节点子树的数量；“<strong>叶子节点</strong>”表示度为0的节点；“<strong>节点的层次</strong>”表示节点所在的层级，根节点层次是1，根节点的子节点层次是2；“<strong>树的深度</strong>”表示树拥有的最大层次。</p>
+<p>我们可以创建一个treeNode来描述树的节点：</p>
+<pre class="ql-syntax">let treeNode = function(val){
+  this.val = val
+  this.left = this.right = null
+}
+</pre><p>二叉树也有不同的类型，其中最常见的是二叉查找树。</p><p>二叉查找树没有键值相等的节点，它上面任意节点的左子树如果不为空，那左子树上所有节点的值都小于根节点的值。如果右子树不为空，那右子树上所有节点的值都大于根节点的值。二叉查找树上任意节点的左子树或者右子树也是二叉查找树。</p><p><strong>计算二叉查找树的深度</strong></p><pre class="ql-syntax" spellcheck="false">const maxDepth = root =&gt; {
+  if(!root){
+    return 0
+  }
+  return Math.max(maxDepth(root.left), maxDepth(root.right))+1
+}
+</pre>
+<p><strong>二叉查找树的前序遍历</strong></p>
+<pre class="ql-syntax">const preorderTraversal = root =&gt; {
+  const ans = []
+  preOrder(root, ans)
+  return ans
+}
+function preOrder(root, ans){
+  if(!root){
+    return
+  }
+  // 访问节点的值
+  ans.push(root.val)
+
+  // 前序遍历左子树
+  preOrder(root.left, ans)
+
+  // 前序遍历右子树
+  preOrder(root.right, ans)
+}
+</pre>
+<p><strong>二叉查找树的中序遍历</strong></p>
+<pre class="ql-syntax">const inOrderTraversal = root =&gt; {
+  const ans = []
+  inOrder(root, ans)
+  return ans
+}
+function inOrder(root, ans){
+  if(!root){
+    return
+  }
+  inOrder(root.left, ans)
+  ans.push(root.val)
+  inOrder(root.right, ans)
+}
+</pre>
+<p><strong>二叉查找树的后序遍历</strong></p>
+<pre class="ql-syntax">const postOrderTraversal = root =&gt; {
+  const ans = []
+  postOrder(root, ans)
+  return ans
+}
+function postOrder(root, ans){
+  if(!root){
+    return
+  }
+  postOrder(root.left, ans)
+  postOrder(root.right, ans)
+  ans.push(root.val)
+}
+</pre>
+<p><strong>二叉查找树的节点最小距离</strong></p>
+<pre class="ql-syntax">// 因为中序遍历序列为递增序列，所以只需考察序列相邻两个元素的差值，取最小的即可
+const minDiff = root =&gt; {
+  let ans = Number.MAX_SAFE_INTEGER
+  let pre = 0
+  inOrder(root)
+  return ans
+
+  function inOrder(root){
+    if(!root){
+      return
+    }
+    inOrder(root.left, ans)
+    ans = Math.min(ans, (root.val-pre))
+    pre = root.val
+    inOrder(root.right, ans)
+  }
+}
+</pre>
+<p><strong>二叉查找树的坡度</strong></p>
+<p>坡度的定义是该节点的左子树节点之和与右子树节点之和的差值的绝对值。整个树的坡度则是各个节点坡度的和</p>
+<pre class="ql-syntax">// 后序遍历是先遍历左子树然后右子树最后父节点，符合计算坡度的顺序
+const findTilt = root =&gt; {
+  let sum = 0
+  postOrder(root)
+  return sum
+
+  function postOrder(root){
+    if(!root){
+      return 0
+    }
+    const left = postOrder(root.left)
+    const right = postOrder(root.right)
+    sum += Math.abs(left - right)
+    return root.val + left + right
+  }
+}
+</pre>`,
+    "time": "2019",
+    "type": "Javascript",
+    "copyright": "notes",
+    "query": {
+      "name": "二叉树"
+    },
+    "link": "/blogDetail",
+    "summary": "树是计算机科学里面经常用到的一种非线性数据结构。二叉树是一种特殊的树结构",
+    "tag": [
+      "JavaScript"
+    ]
+  },
+  {
+    "title": "柯里化",
+    "content": `<p> 在以前的某次面试里，面试官给我出了这么一道题</p>
+<p>实现一个函数function(1)(2)(3)(4)。那时的我基本是懵的，这是啥？？？函数还可以这么调用的吗？</p>
+<p>在后面的学习里我知道了，函数还真可以这么调用。简单一点理解就是嵌套多个函数。function(1)会返回一个函数，假设函数名叫function1。然后调用参数2，也就是function1(2)。function1(2)同样也是返回一个函数，然后调用参数3。以此类推，直到参数调用完毕，这就是函数的柯里化。</p>
+<p>下面来看如何实现从 add(1,2,3,4) 到 _add(1)(2)(3)(4) 。</p>
+<pre class="ql-syntax">function curry(fn,len = fn.length){
+  return _curry.call(this, fn, len)
+}
+function _curry(fn, len, ...args){
+  return function(...params){
+    let _args = [...args, ...params]
+    if(_args.length &gt;= len){
+      return fn.apply(this, _args)
+    } else {
+      return _curry.call(this, fn, len, ..._args)
+    }
+  }
+}
+let _add = curry(add(1,2,3,4))
+_add(1)(2)(3)(4)
+</pre>`,
+    "time": "2019",
+    "type": "Javascript",
+    "copyright": "notes",
+    "query": {
+      "name": "柯里化"
+    },
+    "link": "/blogDetail",
+    "summary": "在以前的某次面试里，面试官给我出了这么一道题",
+    "tag": [
+      "JavaScript"
+    ]
+  },
+  {
     "title": "css变量",
     "content": `<p>现如今CSS能做到的事情越来越多了，不借助预处理器，也可以使用变量。</p>
 <p>一般是在某个选择器上声明，然后在它的后代元素就可以通过var()来使用了。var()使用变量的时候，还可以使用第二个参数作为默认值。</p>
