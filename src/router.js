@@ -24,6 +24,11 @@ const routerList =  new Router({
       path: '/edit',
       name: 'edit',
       component: resolve => require(['./views/edit.vue'], resolve)
+    },
+    {
+      path: '/me',
+      name: 'me',
+      component: resolve => require(['./views/about-me.vue'], resolve)
     }
   ]
 })

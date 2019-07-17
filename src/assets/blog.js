@@ -67,8 +67,7 @@ dataList.forEach(dataList =&gt; {
   instance.querySelector('.content').innerHTML = book.content;
   document.querySelector('.list').appendChild(instance);
 })
-</pre>
-<p>to be continue</p>`,
+</pre>`,
     "time": "2019",
     "type": "HTML5",
     "copyright": "notes",

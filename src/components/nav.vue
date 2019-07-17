@@ -20,7 +20,7 @@
         <i class="el-icon-house"></i>
         <span slot="title">主页</span>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="/me">
         <i class="el-icon-user"></i>
         <span slot="title">关于我</span>
       </el-menu-item>
